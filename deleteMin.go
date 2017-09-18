@@ -5,13 +5,14 @@ import "fmt"
 func main() {
 	var balance = []int{2, 9, 3, 6, 8}
 	var min int
-	min = deleteMin(balance, 5)
+	min = deleteMin(balance)
 
 	fmt.Printf("最小值是 %d", min)
 }
 
-func deleteMin(param []int, size int) int {
+func deleteMin(param []int) int {
 	var i, k, c int
+	var size = len(param)
 	var j = param[0]
 	if size > 1 {
 		for i = 0; i < size; i++ {
@@ -21,9 +22,12 @@ func deleteMin(param []int, size int) int {
 			}
 		}
 		k = param[c]
-		for j = i; j < size-1; j++ {
-			param[j] = param[j+1]
-		}
+		param[c] = param[size-1]
+		param = param[0 : size-1]
+		/*for i = 0; i < len(param); i++ {
+			fmt.Printf("%d", param[i])
+		}*/
+		fmt.Println(param)
 		return k
 	} else {
 		k = j
