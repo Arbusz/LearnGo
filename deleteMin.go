@@ -24,9 +24,6 @@ func deleteMin(param []int) int {
 		k = param[c]
 		param[c] = param[size-1]
 		param = param[0 : size-1]
-		/*for i = 0; i < len(param); i++ {
-			fmt.Printf("%d", param[i])
-		}*/
 		fmt.Println(param)
 		return k
 	} else {
