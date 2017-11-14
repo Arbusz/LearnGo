@@ -11,6 +11,82 @@ type Node struct {
 	right *Node
 }
 
+type seqStack struct {
+	data [100]*Node
+	tag  [100]int // 后续遍历准备
+	top  int      // 数组下标
+}
+
+func treeMake(data []interface{}) *Node {
+	if len(data) == 0 {
+		return nil
+	}
+	root := &Node{}
+	switch t := data[0].(type) {
+	case int:
+		root.data = t
+	case nil:
+		return nil
+	default:
+		panic("Unknown element type")
+	}
+
+	queue := make([]*Node, 1)
+	queue[0] = root
+
+	data = data[1:]
+	for len(data) > 0 && len(queue) > 0 {
+		node := queue[0]
+		queue = queue[1:]
+
+		// 左侧节点
+		node.left = newNodeFromData(data[0])
+		if node.left != nil {
+			queue = append(queue, node.left)
+		}
+		data = data[1:]
+
+		// 右侧节点
+		if len(data) > 0 {
+			node.right = newNodeFromData(data[0])
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+			data = data[1:]
+		}
+	}
+	return root
+}
+
+func newNodeFromData(val interface{}) *Node {
+	switch t := val.(type) {
+	case int:
+		return &Node{data: t}
+	case nil:
+		return nil
+	default:
+		panic("Unknown element type")
+	}
+}
+
+//func read() []Node {
+//	var N int
+//	fmt.Scanf("%d", &N)
+//	var nodes []Node = make([]Node, N)
+//	for i := 0; i < N; i++ {
+//		var da, indexLeft, indexRight int
+//		fmt.Scanf("%d %d %d",&da,&indexLeft,&indexRight)
+//		nodes[i].data=da
+//		if indexLeft >= 0 {
+//			nodes[i].left = &nodes[indexLeft]
+//		}
+//		if indexRight >= 0{
+//			nodes[i].right = &nodes[indexRight]
+//		}
+//	}
+//	return nodes
+//}
+
 func breadthFirst(treeNode *Node) {
 	l := list.New()
 	l.PushBack(treeNode)
@@ -76,26 +152,97 @@ func Postorder(treeNode *Node) {
 		return
 	}
 }
+//
+//func Preorder(node *Node) (result []int) {
+//	var s seqStack
+//	s.top = -1 // 空
+//	if node == nil {
+//		panic("no data here")
+//	}else {
+//		for node != nil || s.top != -1 {
+//			for node != nil {
+//				result = append(result, node.data)
+//				s.top++
+//				s.data[s.top] = node
+//				node = node.left
+//			}
+//			s.top--
+//			node = s.data[s.top + 1]
+//			node = node.right
+//		}
+//	}
+//	fmt.Println(result)
+//	return
+//}
+//
+//func Inorder(node *Node) (result []int ) {
+//	var s seqStack
+//	s.top = -1
+//	if node == nil {
+//		panic("no data here")
+//	}else {
+//		for node != nil || s.top != -1 {
+//			for node != nil {
+//				s.top++
+//				s.data[s.top] = node
+//				node = node.left
+//			}
+//			s.top--
+//			node = s.data[s.top + 1]
+//			result = append(result, node.data)
+//			node = node.right
+//		}
+//	}
+//	fmt.Println(result)
+//	return
+//}
+//
+//
+//func Postorder(node *Node) (result []int)  {
+//	var s seqStack
+//	s.top = -1
+//
+//	if node == nil {
+//		panic("no data here")
+//	}else {
+//		for node != nil || s.top != -1 {
+//			for node != nil {
+//				s.top++
+//				s.data[s.top] = node
+//				s.tag[s.top] = 0
+//				node = node.left
+//			}
+//
+//			if s.tag[s.top] == 0 {
+//				node = s.data[s.top]
+//				s.tag[s.top] = 1
+//				node = node.right
+//			}else {
+//				for s.tag[s.top] == 1 {
+//					s.top--
+//					node = s.data[s.top + 1]
+//					result = append(result, node.data)
+//					if s.top < 0 {
+//						break
+//					}
+//				}
+//				node = nil
+//			}
+//		}
+//	}
+//	fmt.Println(result)
+//	return
+//}
 
 func main() {
-	node7 := Node{data: 7, left: nil, right: nil}
-	node11 := Node{data: 11, left: nil, right: nil}
-	node12 := Node{data: 12, left: nil, right: nil}
-	node6 := Node{data: 6, left: nil, right: &node7}
-	node8 := Node{data: 8, left: nil, right: nil}
-	node10 := Node{data: 10, left: &node11, right: &node12}
-	node4 := Node{data: 4, left: nil, right: nil}
-	node5 := Node{data: 5, left: &node6, right: &node8}
-	node9 := Node{data: 9, left: &node10, right: nil}
-	node2 := Node{data: 2, left: &node4, right: &node5}
-	node3 := Node{data: 3, left: nil, right: &node9}
-	node1 := Node{data: 1, left: &node2, right: &node3}
-	breadthFirst(&node1)
+	treeRoot := treeMake([] interface{}{1, 2, 3, nil, nil, 4, 5})
+	breadthFirst(treeRoot)
 	fmt.Printf("\n")
-	Preorder(&node1)
+	Preorder(treeRoot)
 	fmt.Printf("\n")
-	Inorder(&node1)
+	Inorder(treeRoot)
 	fmt.Printf("\n")
-	Postorder(&node1)
+	Postorder(treeRoot)
 
 }
+
