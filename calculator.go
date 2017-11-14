@@ -86,13 +86,22 @@ func pre2stuf(exps []string) (exps2 []string) {
 
 	for _, exp := range exps {
 		if isOperate(exp) {
+			var count3=2
 			if op, ok := isPop(list1, exp); ok {
+				if exp == "("{
+					count3++
+				}
 				for _, s := range op {
 					list2.PushBack(s)
 				}
 			}
 			if exp == ")" {
+				count3--
 				continue
+			}
+			if count3 != 2{
+				fmt.Println("Your expresion2 is wrong!")
+				os.Exit(1)
 			}
 			list1.PushBack(exp)
 		} else {
@@ -117,7 +126,13 @@ func caculate(exps []string) int {
 	list1 := list.New()
 
 	for _, s := range exps {
+		var count int
+		count++
 		if isOperate(s) {
+			if isOperate(exps[count]){
+				fmt.Println("Your expresion1 is wrong!")
+				os.Exit(1)
+			}
 			back := list1.Back()
 			prev := back.Prev()
 			backVal, _ := back.Value.(int)
@@ -131,6 +146,10 @@ func caculate(exps []string) int {
 			case "*":
 				res = prevVal * backVal
 			case "/":
+				if backVal == 0{
+					fmt.Println("Dividor cannot be zero.")
+					os.Exit(1)
+				}
 				res = prevVal / backVal
 			}
 			list1.Remove(back)
@@ -168,7 +187,10 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println(exps)
+
 	exps2 := pre2stuf(exps)
 	fmt.Println(exps2)
+
 	fmt.Println(caculate(exps2))
+
 }
