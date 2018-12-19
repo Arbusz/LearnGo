@@ -78,10 +78,38 @@
  *
  */
 func intToRoman(num int) string {
-	//表驱动法
-	i := [10]string{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
-	x := [10]string{"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
-	c := [10]string{"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
-	m := [4]string{"", "M", "MM", "MMM"}
-	return m[num/1000] + c[num%1000/100] + x[num%1000%100/10] + i[num%1000%100%10]
+	//表驱动法（太暴力了）
+	// i := [10]string{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
+	// x := [10]string{"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
+	// c := [10]string{"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
+	// m := [4]string{"", "M", "MM", "MMM"}
+	// return m[num/1000] + c[num%1000/100] + x[num%1000%100/10] + i[num%1000%100%10]
+
+	romans := []string{"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"}
+	values := []int{1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000}
+
+	var res string
+	i := len(romans) - 1
+	for i >= 0 {
+		if num <= 0 {
+			break
+
+		}
+
+		leftOver := num - values[i]
+		if leftOver >= 0 {
+			res += romans[i]
+			num -= values[i]
+
+		} else {
+			i--
+
+		}
+
+	}
+
+	return res
+
 }
+
+
