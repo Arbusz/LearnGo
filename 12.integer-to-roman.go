@@ -79,14 +79,9 @@
  */
 func intToRoman(num int) string {
 	//表驱动法
-	d := [4][]string{
-		[]string{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"},
-		[]string{"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"},
-		[]string{"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"},
-		[]string{"", "M", "MM", "MMM"},
-	}
-	return d[3][num/1000] +
-		d[2][num/100%10] +
-		d[1][num/10%10] +
-		d[0][num%10]
+	i := [10]string{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
+	x := [10]string{"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
+	c := [10]string{"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
+	m := [4]string{"", "M", "MM", "MMM"}
+	return m[num/1000] + c[num%1000/100] + x[num%1000%100/10] + i[num%1000%100%10]
 }
